@@ -1,0 +1,4 @@
+Selecione a direção
+1-Laplace:
+2-SobelH
+3-SobelV
