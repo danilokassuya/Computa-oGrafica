@@ -13,7 +13,6 @@ def getPixelMascara(pixel,i,j,tipo,tamanho,mascara):
     if tipo == 0:
         for a in range(i-tamanho,i+tamanho+1):
             for b in range(j-tamanho,j+tamanho+1):
-                print(pixel[a,b][0])
                 pixels += int(pixel[a,b][0]) * mascara[k]
                 k += 1
     if tipo == 1:
@@ -26,9 +25,9 @@ def getPixelMascara(pixel,i,j,tipo,tamanho,mascara):
             for b in range(j-tamanho,j+tamanho+1):
                 pixels += int(pixel[a,b][2]) * mascara[k]
                 k += 1 
-    if pixels < 0:
+    if pixels < 50:
         pixels = 0
-    if pixels >255:
+    if pixels >200:
         pixels = 0
     return pixels
 
@@ -62,11 +61,10 @@ for i in range(im.size[0]):
                 media[i,j] = (int(getPixelMascara(pixel,i,j,0,tamanho,mascara)),
                                 int(getPixelMascara(pixel,i,j,1,tamanho,mascara)),
                                 int(getPixelMascara(pixel,i,j,2,tamanho,mascara)))
-                print(media[i,j])
             else:
                 media[i,j] = (0,0,0)
         else:
             media[i,j] = (0,0,0)
     for j in range(im.size[1]):
         pixel[i,j] = media[i,j]
-im.save('media.jpg')
+im.save('direcional.jpg')
