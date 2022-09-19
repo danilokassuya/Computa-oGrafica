@@ -1,11 +1,11 @@
 import statistics
 from tokenize import Double
-from PIL import Image
+from PIL import Image, ImageOps
 import numpy as np
 import math
 #define alfa(x,a1,a2) ((x==0) ? (a1) : (a2))
-im = Image.open('teste3.jpg','r')
-
+im = Image.open('cosseno.jpg','r')
+im = ImageOps.grayscale(im)
 rgb = list(im.getdata())
 
 pixel = im.load()
@@ -21,7 +21,7 @@ alfa2 = math.sqrt(2.0/n)
 soma1 = 0
 soma2 = 0
 soma3 = 0
-saida = Image.new('RGB', (largura,altura),color="black")
+saida = Image.new('grayscale', (largura,altura),color="black")
 media = saida.load()
 for u in range(largura):
     for v in range(altura):
@@ -32,20 +32,21 @@ for u in range(largura):
                 soma1 += (pixel[i,j][0] * math.cos(bidi) * math.cos(bidi2))
                 soma2 += (pixel[i,j][1] * math.cos(bidi) * math.cos(bidi2))
                 soma3 += (pixel[i,j][2] * math.cos(bidi) * math.cos(bidi2))
-        if u == 0:
-            alfa  = alfa1
-        else:
-            alfa = alfa2
-        soma1 *= alfa
-        soma2 *= alfa
-        soma3 *= alfa
-        if v == 0:
-            alfa  = alfa1
-        else:
-            alfa = alfa2
-        soma1 *= alfa
-        soma2 *= alfa
-        soma3 *= alfa
+                print(bidi,bidi2)
+                if u == 0:
+                    alfa  = alfa1
+                else:
+                    alfa = alfa2
+                soma1 *= alfa
+                soma2 *= alfa
+                soma3 *= alfa
+                if v == 0:
+                    alfa  = alfa1
+                else:
+                    alfa = alfa2
+                soma1 *= alfa
+                soma2 *= alfa
+                soma3 *= alfa
         media[u,v] = (int(soma1),int(soma2),int(soma3))
         soma = 0
-saida.save('cosseno.jpg')
+saida.save('invertida.jpg')
