@@ -1,36 +1,51 @@
+from multiprocessing.connection import wait
 import statistics
 from PIL import Image
-from numpy import np
-im = Image.open('teste4.jpg','r')
+import numpy as np
+import matplotlib.pyplot as plt
 
-rgb = list(im.getdata())
+im = Image.open('teste2.png','r').convert('L')
 
 pixel = im.load()
 
-histograma = np.zeros(255,dtype=np.float32)
-
-for i in range(im.size[0]):
-    for j in range(im.size[1]):
-        k = pixel[i,j][0]
-        histograma[k] = histograma[k] + 1
-
 largura, altura = im.size
-p = []
-for i in range(255):
-        p[i][j] = histograma[k]/(altura*largura)
 
+histograma = np.zeros(256,dtype=np.float32)
 
-saida = Image.new('RGB', (largura,altura),color="black")
-media = saida.load()
 for i in range(im.size[0]):
     for j in range(im.size[1]):
-        if i > (tamanho) and i < (largura - tamanho):
-            if j > (tamanho) and j < (altura - tamanho):
-                media[i,j] = (int(getPixelMascara(pixel,i,j,0,tamanho,mascara)),
-                                int(getPixelMascara(pixel,i,j,1,tamanho,mascara)),
-                                int(getPixelMascara(pixel,i,j,2,tamanho,mascara)))
-            else:
-                media[i,j] = (0,0,0)
+        k = pixel[i,j]
+        histograma[k] = histograma[k] + 1
+plt.bar(list(range(256)),histograma)
+#plt.show()
+p = 128
+t = 0
+while p != t:
+    count = 0
+    t = p
+    total1 = 0
+    intensidade1 = 0
+    total2 = 0
+    intensidade2 = 0
+    while count < t:
+        total1 += histograma[count]
+        intensidade1 += histograma[count]*count
+        count += 1
+    while count < 256:
+        total2 += histograma[count]
+        intensidade2 += histograma[count]*count
+        count += 1
+    a = intensidade1/total1
+    b = intensidade2/total2
+    p = (a+b)/2
+    p = round(p,0)
+
+saida = Image.new('L', (largura,altura),color="black")
+pixel2 = saida.load()
+for i in range(im.size[0]):
+    for j in range(im.size[1]):
+        if pixel[i,j] <= p:
+            pixel2[i,j] = 0
         else:
-            media[i,j] = (0,0,0)
-saida.save('direcional.jpg')
+            pixel2[i,j] = 255
+saida.save('limiarização.jpg')
